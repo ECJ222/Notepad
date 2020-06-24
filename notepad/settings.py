@@ -25,7 +25,7 @@ SECRET_KEY = '^-4#hwqlkbd5t9$p-^jrb16843iamw@-z(f%5oi$khv-bovuvu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['vue-django-notepad.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
