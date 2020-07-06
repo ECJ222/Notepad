@@ -69,6 +69,6 @@ tweepy==3.8.0
 urllib3==1.25.8
 urwid==2.1.0
 Werkzeug==1.0.0
-whitenoise==3.3.0
+whitenoise==5.1.0
 wsproto==0.14.1
 zstandard==0.12.0
