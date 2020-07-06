@@ -82,16 +82,27 @@ CORS_ORIGIN_WHITELIST=['http://localhost:8080', '127.0.0.1:8080']
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':'mydb',
-        'USER':'myuser',
-        'PASSWORD':'mypass',
-        'HOST':'localhost',
-        'PORT':'',
+try:
+
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600, ssl_require=HEROKU,
+            default=os.environ['DATABASE_URL']
+        )
     }
-}
+    
+except KeyError:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME':'mydb',
+            'USER':'myuser',
+            'PASSWORD':'mypass',
+            'HOST':'localhost',
+            'PORT':'',
+        }
+    }
 
 
 # Password validation
