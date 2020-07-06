@@ -23,9 +23,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
-ALLOWED_HOSTS = ['stickynotepad.herokuapp.com', 'localhost']
+HEROKU = ('ENV' in os.environ and os.environ['ENV'] == 'heroku')
+DEBUG = not HEROKU
+
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['stickynotepad.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -55,6 +60,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if HEROKU:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
 
 ROOT_URLCONF = 'notepad.urls'
 
@@ -90,7 +99,7 @@ try:
             default=os.environ['DATABASE_URL']
         )
     }
-    
+
 except KeyError:
 
     DATABASES = {
