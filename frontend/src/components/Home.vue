@@ -42,7 +42,7 @@
     
    </div>
   </div>
-  <div v-if=" token !=null ">
+  <div v-if=" token!=null ">
    <div class="HoverOverme">
     <router-link to="/notepad"><i class="fa fa-plus-circle"></i></router-link> 
     <span class="AddNote">New Note</span>
@@ -56,12 +56,12 @@
   </div>
   <input type="file" ref="file" name="imagefile" style="display:none" @change="filestore">
   <form id="uploadimage" method="post" name="uploadimage" enctype="multipart/form-data" @submit.prevent="chooseimage(note)">
-  <div v-for="(note,index) in notes" v-bind:key="note.id"  v-if="note.user == username">
+  
     <div v-for="(note,index) in images" v-bind:key="note.id" >
         <div v-if="token==null">
           <img @click="Uploadpicture" class="userimage" src="user1.png">
         </div>
-         <img else @click="Uploadpicture" class="userimage" src="user1.png">
+         <img v-else @click="Uploadpicture" class="userimage" src="user1.png">
       
       <div v-if="token!=null">
        <div  v-if="note.user == username ">
@@ -71,31 +71,32 @@
     
     </div>
     
-
+  <div v-for="(note,index) in user" v-bind:key="note.id"  v-if="note.username == username">
+     
    
    <!--choose picture-->
     
   
-  <div class="upload" v-if="!img ">
-    <div v-if="selected_image==null">
-      <div v-if="token==null">
-      <router-link to="/login"><button class="btn btn-primary " id="upload">Upload</button></router-link>
+    <div class="upload" v-if="!img ">
+      <div v-if="selected_image==null">
+        <div v-if="token==null">
+        <router-link to="/login"><button class="btn btn-primary " id="upload">Upload</button></router-link>
+        </div>
+        <button v-else class="btn btn-primary " id="upload" @click="choosefile">Upload</button>
       </div>
-      <button v-else class="btn btn-primary " id="upload" @click="choosefile">Upload</button>
+      <div v-if="selected_image!=null && loader==false ">
+       <button class="btn btn-primary" id="save" @click="!chooseimage(note)" >Save</button>
+      </div>
+      <div v-else-if="selected_image!=null && loader==true" class="loader1">
+      <button class="btn btn-primary" id="loadL">
+       <span></span>
+       <span></span>
+       <span></span>
+       <span></span>
+       <span></span></button>
+      </div>
+     
     </div>
-    <div v-if="selected_image!=null && loader==false ">
-     <button class="btn btn-primary" id="save" @click="!chooseimage(note)" >Save</button>
-    </div>
-    <div v-else-if="selected_image!=null && loader==true" class="loader1">
-    <button class="btn btn-primary" id="loadL">
-     <span></span>
-     <span></span>
-     <span></span>
-     <span></span>
-     <span></span></button>
-    </div>
-   
-  </div>
   
 
   </div>
@@ -151,6 +152,7 @@ export default {
       getimage:localStorage.getItem('image') || null,
       loader:false,
       imageshow:false,
+      user : [axios.get("http://127.0.0.1:8000/api/user/").then(res => console.log(this.user=res.data)).catch(err => console.log(err))]
       
     
     };
@@ -224,13 +226,17 @@ export default {
       const config = { headers :{'Content-Type' : 'multipart/form-data'}}
       const data= new FormData(document.getElementById('uploadimage'))
       data.append('image',this.selected_image)
-      data.append('username',note.username)
+      data.append('username',note.id)
       data.append('show',true)
       axios.post("http://127.0.0.1:8000/api/image/",data,config).then(res =>{ 
         console.log(res.data,' <<< res.data >>> ')
         localStorage.setItem('image',res.data)
         this.loader=true
         
+        setTimeout( () => {
+          window.location.reload();
+
+        },3000)
         
     }).catch(err => console.log(err))
       setTimeout( () => {

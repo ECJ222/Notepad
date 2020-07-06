@@ -1,1 +1,1 @@
-web: gunicorn notepad.wsgi
+web: gunicorn notepad.wsgi --log-file -

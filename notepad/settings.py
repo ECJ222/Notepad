@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^-4#hwqlkbd5t9$p-^jrb16843iamw@-z(f%5oi$khv-bovuvu'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['vue-django-notepad.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['stickynotepad.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,7 +60,7 @@ ROOT_URLCONF = 'notepad.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR,'dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,8 +74,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'notepad.wsgi.application'
-CORS_ORIGIN_ALLOW_ALL=True
-CORS_ORIGIN_WHITELIST=['http://localhost:8080']
+CORS_ORIGIN_ALLOW_ALL=False
+CORS_ORIGIN_WHITELIST=['http://localhost:8080', '127.0.0.1:8080']
 
 
 # Database
@@ -148,8 +147,9 @@ WEBPACK_LOADER={
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'dist'),
+    os.path.join(BASE_DIR, 'dist/static'),
 )
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")
 
@@ -159,3 +159,8 @@ REST_FRAMEWORK = {
        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
