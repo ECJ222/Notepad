@@ -2,6 +2,9 @@
   "name": "frontend",
   "description": "A Vue.js project",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.x"
+  },
   "author": "enoch chejieh <enochchejieh@gmail.com>",
   "license": "MIT",
   "private": true,
