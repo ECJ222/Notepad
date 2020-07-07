@@ -3,6 +3,8 @@ var webpack = require('webpack')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 var BundleTracker = require("webpack-bundle-tracker");
 var WriteFilePlugin = require("write-file-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
   entry: './src/main.js',
   output: {
@@ -75,7 +77,8 @@ module.exports = {
     new BundleTracker({
       filename: 'webpack-stats.json',
     }),
-    new WriteFilePlugin()
+    new WriteFilePlugin(),
+    new HtmlWebpackPlugin()
   ],
   resolve: {
     alias: {
