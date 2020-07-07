@@ -20,17 +20,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+try:
+    SECRET_KEY = os.environ['SECRET_KEY']
+except:
+    SECRET_KEY = '^-4#hwqlkbd5t9$p-^jrb16843iamw@-z(f%5oi$khv-bovuvu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-HEROKU = ('ENV' in os.environ and os.environ['ENV'] == 'heroku')
-DEBUG = not HEROKU
+DEBUG = True
 
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = ['stickynotepad.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['stickynotepad.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -51,9 +50,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -61,16 +60,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if HEROKU:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
+
 
 ROOT_URLCONF = 'notepad.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'dist')],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,33 +82,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'notepad.wsgi.application'
 CORS_ORIGIN_ALLOW_ALL=False
-CORS_ORIGIN_WHITELIST=['http://localhost:8080', '127.0.0.1:8080']
+CORS_ORIGIN_WHITELIST=['http://localhost:8080', 'http://127.0.0.1:8080']
 
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-try:
-
-    DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600, ssl_require=HEROKU,
-            default=os.environ['DATABASE_URL']
-        )
+DATABASES = {
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME':'NotepadDB',
+        'USER':'postgres',
+        'PASSWORD':'mypass',
+        'HOST':'localhost',
+        'PORT':'5432',
     }
-
-except KeyError:
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME':'mydb',
-            'USER':'myuser',
-            'PASSWORD':'mypass',
-            'HOST':'localhost',
-            'PORT':'',
-        }
-    }
+}
 
 
 # Password validation
@@ -157,7 +143,7 @@ WEBPACK_LOADER={
     'DEFAULT':{
        'CACHE': not DEBUG,
        'BUNDLE_DIR_NAME':'',
-       'STATS_FILE':os.path.join(BASE_DIR,'frontend/webpack-stats.json'),
+       'STATS_FILE':os.path.join(BASE_DIR,'webpack-stats.json'),
        'POLL_INTERVAL':0.1,
        'TIMEOUT':None,
        'IGNORE':['.+\.hot-update.js','.+\.map']  
