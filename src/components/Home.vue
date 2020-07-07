@@ -56,7 +56,7 @@
   </div>
   <input type="file" ref="file" name="imagefile" style="display:none" @change="filestore">
   <form id="uploadimage" method="post" name="uploadimage" enctype="multipart/form-data" @submit.prevent="chooseimage(note)">
-  
+    <img @click="Uploadpicture" class="userimage" src="user1.png">
     <div v-for="(note,index) in images" v-bind:key="note.id" >
         <div v-if="token==null">
           <img @click="Uploadpicture" class="userimage" src="user1.png">
@@ -146,13 +146,13 @@ export default {
       count:1,
       token:localStorage.getItem('user-token') || null,
       username:localStorage.getItem('username'),
-      notes:[axios.get("http://127.0.0.1:8000/api/note/").then(res => console.log(this.notes=res.data)).catch(err => console.log(err))],
-      images:[axios.get("http://127.0.0.1:8000/api/image/").then(res => console.log(this.images=res.data)).catch(err => console.log(err))],
+      notes:[axios.get("https://stickynotepad.herokuapp.com/api/note/").then(res => console.log(this.notes=res.data)).catch(err => console.log(err))],
+      images:[axios.get("https://stickynotepad.herokuapp.com/api/image/").then(res => console.log(this.images=res.data)).catch(err => console.log(err))],
       selected_image:null,
       getimage:localStorage.getItem('image') || null,
       loader:false,
       imageshow:false,
-      user : [axios.get("http://127.0.0.1:8000/api/user/").then(res => console.log(this.user=res.data)).catch(err => console.log(err))]
+      user : [axios.get("https://stickynotepad.herokuapp.com/api/user/").then(res => console.log(this.user=res.data)).catch(err => console.log(err))]
       
     
     };
@@ -173,7 +173,7 @@ export default {
       this.y=true;
   
   },remove:function(note,index){
-    axios.delete("http://127.0.0.1:8000/api/note/"+note.id).then(res=>{
+    axios.delete("https://stickynotepad.herokuapp.com/api/note/"+note.id).then(res=>{
       this.notes.splice(index,1)
       console.log(this.notes)
     })
@@ -182,7 +182,7 @@ export default {
     Update:function(note){
      note.editing=true;
      this.beforenote=note.title
-     axios.put("http://127.0.0.1:8000/api/note/"+note.id+"/",{
+     axios.put("https://stickynotepad.herokuapp.com/api/note/"+note.id+"/",{
       title:note.title,
       username:note.username,
       editing:false
@@ -190,7 +190,7 @@ export default {
     },
     edit:function(note){
       note.editing=false;
-      axios.put("http://127.0.0.1:8000/api/note/"+note.id+"/",{
+      axios.put("https://stickynotepad.herokuapp.com/api/note/"+note.id+"/",{
       title:note.title,
       username:note.username,
       editing:false
@@ -207,7 +207,7 @@ export default {
     },
     escape:function(note){
       note.editing=false;
-      axios.put("http://127.0.0.1:8000/api/note/"+note.id+"/",{
+      axios.put("https://stickynotepad.herokuapp.com/api/note/"+note.id+"/",{
       title:this.beforenote,
       username:note.username,
       editing:false
@@ -228,7 +228,7 @@ export default {
       data.append('image',this.selected_image)
       data.append('username',note.id)
       data.append('show',true)
-      axios.post("http://127.0.0.1:8000/api/image/",data,config).then(res =>{ 
+      axios.post("https://stickynotepad.herokuapp.com/api/image/",data,config).then(res =>{ 
         console.log(res.data,' <<< res.data >>> ')
         localStorage.setItem('image',res.data)
         this.loader=true

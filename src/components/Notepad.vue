@@ -38,7 +38,7 @@ export default {
       note:'',
       id:2,
       username:localStorage.getItem('username'),
-      user:[axios.get("http://127.0.0.1:8000/api/user/").then(res => console.log(this.user=res.data)).catch(err => console.log(err))],
+      user:[axios.get("https://stickynotepad.herokuapp.com/api/user/").then(res => console.log(this.user=res.data)).catch(err => console.log(err))],
       loader:false
     };
   },
@@ -47,7 +47,7 @@ export default {
       this.$router.push('/')
     },
     send:function(users){
-      axios.post("http://127.0.0.1:8000/api/note/",{
+      axios.post("https://stickynotepad.herokuapp.com/api/note/",{
         title: this.note,
         username: users.id
       }).then(res => {

@@ -46,7 +46,7 @@ export default {
     },
     methods: {
         Createuser:function(){
-            axios.post('http://127.0.0.1:8000/api/user/',{
+            axios.post('https://stickynotepad.herokuapp.com/api/user/',{
                 username: this.Username,
                 password: this.Password
             }).then(res => {
