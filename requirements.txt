@@ -9,7 +9,7 @@ chardet==3.0.4
 Click==7.0
 cryptography==2.4.2
 defusedxml==0.6.0
-dj-database-url==0.4.2
+dj-database-url==0.5.0
 Django==3.0.3
 django-allauth==0.42.0
 django-cors-headers==3.2.1
@@ -34,13 +34,11 @@ Jinja2==3.0.0a1
 kaitaistruct==0.8
 ldap3==2.6.1
 MarkupSafe==1.1.1
-mitmproxy==6.0.0.dev0
 oauthlib==3.1.0
 olefile==0.44
 passlib==1.7.2
 Pigments==1.6
 Pillow==4.2.1
-pkg-resources==0.0.0
 post==2019.4.13
 protobuf==3.10.0
 psycopg2==2.7.3.1
@@ -71,6 +69,6 @@ tweepy==3.8.0
 urllib3==1.25.8
 urwid==2.1.0
 Werkzeug==1.0.0
-whitenoise==3.3.0
+whitenoise==5.1.0
 wsproto==0.14.1
 zstandard==0.12.0

@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
+import dj_database_url
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,12 +20,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+try:
+    SECRET_KEY = os.environ['SECRET_KEY']
+except:
+    SECRET_KEY = '^-4#hwqlkbd5t9$p-^jrb16843iamw@-z(f%5oi$khv-bovuvu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
-ALLOWED_HOSTS = ['stickynotepad.herokuapp.com', 'localhost']
+DEBUG = True
+
+ALLOWED_HOSTS = ['stickynotepad.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -46,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,12 +60,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+
 ROOT_URLCONF = 'notepad.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'dist')],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,20 +82,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'notepad.wsgi.application'
 CORS_ORIGIN_ALLOW_ALL=False
-CORS_ORIGIN_WHITELIST=['http://localhost:8080', '127.0.0.1:8080']
+CORS_ORIGIN_WHITELIST=['http://localhost:8080', 'http://127.0.0.1:8080']
 
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':'mydb',
-        'USER':'myuser',
+        'NAME':'NotepadDB',
+        'USER':'postgres',
         'PASSWORD':'mypass',
         'HOST':'localhost',
-        'PORT':'',
+        'PORT':'5432',
     }
 }
 
@@ -136,7 +143,7 @@ WEBPACK_LOADER={
     'DEFAULT':{
        'CACHE': not DEBUG,
        'BUNDLE_DIR_NAME':'',
-       'STATS_FILE':os.path.join(BASE_DIR,'frontend/webpack-stats.json'),
+       'STATS_FILE':os.path.join(BASE_DIR,'webpack-stats.json'),
        'POLL_INTERVAL':0.1,
        'TIMEOUT':None,
        'IGNORE':['.+\.hot-update.js','.+\.map']  
@@ -145,11 +152,11 @@ WEBPACK_LOADER={
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'dist/static'),
+    os.path.join(BASE_DIR, 'dist'),
 )
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")
 
