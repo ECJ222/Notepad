@@ -1,3 +1,10 @@
+# backend 
+```
+pip install -r requirements.txt
+
+python manage.py runserver
+```
+
 # frontend
 
 > A Vue.js project
